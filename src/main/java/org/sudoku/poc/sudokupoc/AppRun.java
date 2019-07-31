@@ -5,13 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
 
 @Service
 public class AppRun implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(AppRun.class);
+
+    private static final Random RANDOM=new Random(System.currentTimeMillis());
 
     @Override
     public void run(String... args) throws Exception {
@@ -22,8 +25,11 @@ public class AppRun implements CommandLineRunner {
 
     private void test1() {
         Board tab;
+        Instant debut=Instant.now();
         tab=new Board();
         complete(tab);
+        Instant fin=Instant.now();
+        System.out.println("duree:"+ Duration.between(debut,fin));
         affiche(tab);
     }
 
@@ -76,7 +82,9 @@ public class AppRun implements CommandLineRunner {
         if(valeursPossibles.isEmpty()){
             return 0;
         }
-        for(int val:valeursPossibles){
+        List<Integer> liste=new ArrayList<>(valeursPossibles);
+        rotateList(liste);
+        for(int val:liste){
             tab.set(ligne,colonne,val);
             int ligne2,colonne2;
             if(colonne<8) {
@@ -95,5 +103,12 @@ public class AppRun implements CommandLineRunner {
         }
         tab.unset(ligne,colonne);
         return 0;
+    }
+
+    private void rotateList(List<Integer> liste) {
+        int distance=RANDOM.nextInt(liste.size());
+        if(distance!=0) {
+            Collections.rotate(liste,distance);
+        }
     }
 }
