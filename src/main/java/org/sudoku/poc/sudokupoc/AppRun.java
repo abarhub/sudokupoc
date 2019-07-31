@@ -21,43 +21,33 @@ public class AppRun implements CommandLineRunner {
     }
 
     private void test1() {
-        int tab[][];
-        tab=createTab();
+        Board tab;
+        tab=new Board();
         complete(tab);
         affiche(tab);
     }
 
-    private int[][] createTab() {
-        int res[][]=new int[10][10];
-        return res;
+    private void affiche(Board tab){
+        System.out.println(tab);
     }
 
-    private void affiche(int[][] tab){
-        for(int i=0;i<9;i++){
-            for(int j=0;j<9;j++){
-                System.out.print(tab[i][j]);
-            }
-            System.out.println();
-        }
-    }
-
-    private void complete(int[][] tab){
+    private void complete(Board tab){
         complete(tab,0,0);
     }
 
-    private Set<Integer> valeursPossibles(int[][] tab,int ligne,int colonne){
+    private Set<Integer> valeursPossibles(Board tab,int ligne,int colonne){
         Set<Integer> res=new TreeSet<>();
         for(int i=1;i<=9;i++){
             res.add(i);
         }
         for(int i=0;i<9;i++){
-            int n=tab[i][colonne];
+            int n=tab.get(i,colonne);
             if(n>0){
                 res.remove(n);
             }
         }
         for(int i=0;i<9;i++){
-            int n=tab[ligne][i];
+            int n=tab.get(ligne,i);
             if(n>0){
                 res.remove(n);
             }
@@ -71,7 +61,7 @@ public class AppRun implements CommandLineRunner {
         for(int i=debutLigne;i<finLigne;i++){
             for(int j=debutColonne;j<finColonne;j++){
                 if(i!=ligne&&j!=colonne) {
-                    int n = tab[i][j];
+                    int n = tab.get(i,j);
                     if(n>0){
                         res.remove(n);
                     }
@@ -81,13 +71,13 @@ public class AppRun implements CommandLineRunner {
         return res;
     }
 
-    private int complete(int[][] tab,int ligne,int colonne){
+    private int complete(Board tab,int ligne,int colonne){
         Set<Integer> valeursPossibles=valeursPossibles(tab,ligne,colonne);
         if(valeursPossibles.isEmpty()){
             return 0;
         }
         for(int val:valeursPossibles){
-            tab[ligne][colonne]=val;
+            tab.set(ligne,colonne,val);
             int ligne2,colonne2;
             if(colonne<8) {
                 ligne2 = ligne;
@@ -103,7 +93,7 @@ public class AppRun implements CommandLineRunner {
                 return 1;
             }
         }
-        tab[ligne][colonne]=0;
+        tab.unset(ligne,colonne);
         return 0;
     }
 }
