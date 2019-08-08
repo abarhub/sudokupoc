@@ -2,45 +2,84 @@ package org.sudoku.poc.sudokupoc;
 
 import com.google.common.base.Preconditions;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Board {
 
-    private int tab[][];
+    private final int tab[][];
+    private Instant lasteUpdate;
+    private Instant lastIsResolvedInstant;
+    private boolean lastIsResolvedValue;
 
     public Board() {
         tab=createTab();
     }
+
+    public Board(Board board){
+        Preconditions.checkNotNull(board);
+        tab=createTab();
+        for(int i=0;i<tab.length;i++){
+            for(int j=0;j<tab[i].length;j++){
+                tab[i][j]=board.get(i,j);
+            }
+        }
+    }
+
     private int[][] createTab() {
-        return new int[10][10];
+        return new int[9][9];
     }
 
     public int get(int ligne,int colonne){
-        Preconditions.checkArgument(ligne>=0);
-        Preconditions.checkArgument(ligne<9);
-        Preconditions.checkArgument(colonne>=0);
-        Preconditions.checkArgument(colonne<9);
-        return tab[ligne][colonne];
+        Preconditions.checkElementIndex(ligne,9);
+        Preconditions.checkElementIndex(colonne,9);
+        return get(new Position(ligne,colonne));
+    }
+
+    public int get(Position position){
+        Preconditions.checkNotNull(position);
+        return tab[position.getLigne()][position.getColonne()];
     }
 
     public void set(int ligne,int colonne, int val){
-        Preconditions.checkArgument(ligne>=0);
-        Preconditions.checkArgument(ligne<9);
-        Preconditions.checkArgument(colonne>=0);
-        Preconditions.checkArgument(colonne<9);
+        Preconditions.checkElementIndex(ligne,9);
+        Preconditions.checkElementIndex(colonne,9);
         Preconditions.checkArgument(val>=1);
         Preconditions.checkArgument(val<=9);
-        tab[ligne][colonne]=val;
+        set(new Position(ligne,colonne),val);
+    }
+
+    public void set(Position position, int val){
+        Preconditions.checkNotNull(position);
+        Preconditions.checkArgument(val>=1);
+        Preconditions.checkArgument(val<=9);
+        tab[position.getLigne()][position.getColonne()]=val;
+        lasteUpdate=Instant.now();
     }
 
     public void unset(int ligne,int colonne){
-        Preconditions.checkArgument(ligne>=0);
-        Preconditions.checkArgument(ligne<9);
-        Preconditions.checkArgument(colonne>=0);
-        Preconditions.checkArgument(colonne<9);
-        tab[ligne][colonne]=0;
+        Preconditions.checkElementIndex(ligne,9);
+        Preconditions.checkElementIndex(colonne,9);
+        unset(new Position(ligne,colonne));
+    }
+
+    public void unset(Position position){
+        Preconditions.checkNotNull(position);
+        tab[position.getLigne()][position.getColonne()]=0;
+        lasteUpdate=Instant.now();
     }
 
     public boolean isSet(int ligne,int colonne){
-        return tab[ligne][colonne]==0;
+        Preconditions.checkElementIndex(ligne,9);
+        Preconditions.checkElementIndex(colonne,9);
+        return tab[ligne][colonne]!=0;
+    }
+
+    public boolean isSet(Position position){
+        Preconditions.checkNotNull(position);
+        return tab[position.getLigne()][position.getColonne()]!=0;
     }
 
     public String toString(){
@@ -52,5 +91,74 @@ public class Board {
             res.append('\n');
         }
         return res.toString();
+    }
+
+    public boolean isResolved(){
+        if(lasteUpdate!=null&&lastIsResolvedInstant!=null){
+            if(lastIsResolvedInstant.isAfter(lasteUpdate)){
+                return lastIsResolvedValue;
+            }
+        }
+        boolean res=true;
+        for(int i=0;i<9;i++) {
+            for (int j = 0; j < 9; j++) {
+                if(!isSet(new Position(i,j))){
+                    res=false;
+                }
+            }
+        }
+
+        lastIsResolvedInstant=Instant.now();
+        lastIsResolvedValue=res;
+        return res;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        for(int i=0;i<tab.length;i++){
+            if(!Arrays.equals(tab[i],board.tab[i])){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int res=0;
+        for(int i=0;i<tab.length;i++){
+            res+=Arrays.hashCode(tab[i]);
+        }
+        return res;
+    }
+
+    public List<Position> listePositionsNonAffecte() {
+        List<Position> liste = new ArrayList<>();
+        for (int ligne = 0; ligne < 9; ligne++) {
+            for (int colonne = 0; colonne < 9; colonne++) {
+                Position p=new Position(ligne, colonne);
+                if(!isSet(p)) {
+                    liste.add(p);
+                }
+            }
+        }
+        return liste;
+    }
+
+
+    public List<Position> listePositionsAffecte() {
+        List<Position> liste = new ArrayList<>();
+        for (int ligne = 0; ligne < 9; ligne++) {
+            for (int colonne = 0; colonne < 9; colonne++) {
+                Position p=new Position(ligne, colonne);
+                if(isSet(p)) {
+                    liste.add(p);
+                }
+            }
+        }
+        return liste;
     }
 }

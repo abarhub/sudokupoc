@@ -12,7 +12,7 @@ import java.util.*;
 @Service
 public class AppRun implements CommandLineRunner {
 
-    private static final Logger logger = LoggerFactory.getLogger(AppRun.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppRun.class);
 
     @Override
     public void run(String... args) throws Exception {
