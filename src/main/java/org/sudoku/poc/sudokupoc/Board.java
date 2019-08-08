@@ -23,7 +23,7 @@ public class Board {
         tab=createTab();
         for(int i=0;i<tab.length;i++){
             for(int j=0;j<tab[i].length;j++){
-                tab[i][j]=board.get(i,j);
+                tab[i][j]=board.tab[i][j];
             }
         }
     }
@@ -35,7 +35,7 @@ public class Board {
     public int get(int ligne,int colonne){
         Preconditions.checkElementIndex(ligne,9);
         Preconditions.checkElementIndex(colonne,9);
-        return get(new Position(ligne,colonne));
+        return get(PositionUtils.getPosition(ligne,colonne));
     }
 
     public int get(Position position){
@@ -48,7 +48,7 @@ public class Board {
         Preconditions.checkElementIndex(colonne,9);
         Preconditions.checkArgument(val>=1);
         Preconditions.checkArgument(val<=9);
-        set(new Position(ligne,colonne),val);
+        set(PositionUtils.getPosition(ligne,colonne),val);
     }
 
     public void set(Position position, int val){
@@ -62,7 +62,7 @@ public class Board {
     public void unset(int ligne,int colonne){
         Preconditions.checkElementIndex(ligne,9);
         Preconditions.checkElementIndex(colonne,9);
-        unset(new Position(ligne,colonne));
+        unset(PositionUtils.getPosition(ligne,colonne));
     }
 
     public void unset(Position position){
@@ -102,7 +102,7 @@ public class Board {
         boolean res=true;
         for(int i=0;i<9;i++) {
             for (int j = 0; j < 9; j++) {
-                if(!isSet(new Position(i,j))){
+                if(!isSet(PositionUtils.getPosition(i,j))){
                     res=false;
                 }
             }
@@ -139,7 +139,7 @@ public class Board {
         List<Position> liste = new ArrayList<>();
         for (int ligne = 0; ligne < 9; ligne++) {
             for (int colonne = 0; colonne < 9; colonne++) {
-                Position p=new Position(ligne, colonne);
+                Position p=PositionUtils.getPosition(ligne, colonne);
                 if(!isSet(p)) {
                     liste.add(p);
                 }
@@ -153,7 +153,7 @@ public class Board {
         List<Position> liste = new ArrayList<>();
         for (int ligne = 0; ligne < 9; ligne++) {
             for (int colonne = 0; colonne < 9; colonne++) {
-                Position p=new Position(ligne, colonne);
+                Position p=PositionUtils.getPosition(ligne, colonne);
                 if(isSet(p)) {
                     liste.add(p);
                 }

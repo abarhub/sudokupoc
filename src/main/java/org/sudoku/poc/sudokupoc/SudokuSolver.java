@@ -97,10 +97,15 @@ public class SudokuSolver {
         for(int i=1;i<=9;i++){
             res.add(i);
         }
-        for(int i=0;i<9;i++){
-            int n=board.get(i,position.getColonne());
-            if(n>0){
-                res.remove(n);
+        if(!res.isEmpty()) {
+            for (int i = 0; i < 9; i++) {
+                int n = board.get(i, position.getColonne());
+                if (n > 0) {
+                    res.remove(n);
+                }
+                if (res.isEmpty()) {
+                    break;
+                }
             }
         }
         if(!res.isEmpty()) {

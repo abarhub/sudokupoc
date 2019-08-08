@@ -6,11 +6,13 @@ import java.util.List;
 
 public class PositionUtils {
 
+    //private static final
+
     public static Iterator<Position> iterator(){
         List<Position> liste=new ArrayList<>();
         for(int ligne=0;ligne<9;ligne++){
             for(int colonne=0;colonne<9;colonne++){
-                liste.add(new Position(ligne,colonne));
+                liste.add(getPosition(ligne,colonne));
             }
         }
         return liste.iterator();
@@ -20,11 +22,14 @@ public class PositionUtils {
         List<Position> liste=new ArrayList<>();
         for(int ligne=0;ligne<9;ligne++){
             for(int colonne=0;colonne<9;colonne++){
-                liste.add(new Position(ligne,colonne));
+                liste.add(getPosition(ligne,colonne));
             }
         }
         return liste;
     }
 
+    public static Position getPosition(int ligne, int colonne){
+        return new Position(ligne,colonne);
+    }
 
 }

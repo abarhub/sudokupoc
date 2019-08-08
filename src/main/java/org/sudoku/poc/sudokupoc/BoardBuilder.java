@@ -28,24 +28,6 @@ public class BoardBuilder {
             if(listePos.isEmpty()){
                 break;
             } else {
-                //int noPos = RANDOM.nextInt(listePos.size());
-                //position=listePos.get(noPos);
-                rotateList(listePos);
-//                do {
-//                    int ligne = RANDOM.nextInt(9);
-//                    int colonne = RANDOM.nextInt(9);
-//                    position = new Position(ligne, colonne);
-//                    nbTentative++;
-//                    if (nbTentative >= 5) {
-//                        break;
-//                    }
-//                } while (!board2.isSet(position));
-//                if (nbTentative >= 5) {
-//                    LOGGER.error("Erreur pour determiner une case a effacer: {} pos={}", board2, position);
-//                    break;
-//                } else {
-                    //board2.unset(position);
-//                }
                 boolean trouve=false;
                 for(int j=0;j<listePos.size();j++) {
                     position=listePos.get(j);
@@ -55,10 +37,8 @@ public class BoardBuilder {
                     int res = sudokuSolver.nbSolution(board3);
                     if (res == 0) {
                         LOGGER.error("Impossible de resoudre le sudoku: {} {}", board3,position);
-                        //break;
                     } else if (res > 1) {
                         LOGGER.error("Il y a trop de solutions pour le sudoku: {} {}", board2, position);
-                        //break;
                     } else {
                         trouve=true;
                         board2.unset(position);
