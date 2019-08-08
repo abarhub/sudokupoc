@@ -13,7 +13,7 @@ public class SudokuSolver {
 
     public Board resolve(Board board){
         Preconditions.checkNotNull(board);
-        List<Board> liste = resolveTout(board);
+        List<Board> liste = resolveTout(board,true);
         if(liste.isEmpty()) {
             LOGGER.info("il y a aucun sudoku");
             return null;
@@ -40,17 +40,17 @@ public class SudokuSolver {
 
     public int nbSolution(Board board){
         Preconditions.checkNotNull(board);
-        List<Board> liste = resolveTout(board);
+        List<Board> liste = resolveTout(board,false);
         return liste.size();
     }
 
-    public List<Board> resolveTout(Board board){
+    public List<Board> resolveTout(Board board, boolean toutesSolutions){
         Preconditions.checkNotNull(board);
         List<Board> listeBoard=new ArrayList<>();
         List<Position> positionList2=board.listePositionsNonAffecte();
         if(positionList2.isEmpty()){
             LOGGER.trace("resolveTout positionList2 empty : {}",board);
-            listeBoard.add(board);
+            listeBoard.add(new Board(board));
         } else {
             for (Position position : positionList2) {
                 Set<Integer> set = valeursPossibles(board, position);
@@ -58,15 +58,16 @@ public class SudokuSolver {
                     return new ArrayList<>();
                 } else {
                     for (int val : set) {
-                        Board board2 = new Board(board);
+                        //Board board2 = new Board(board);
+                        Board board2 =board;
                         board2.set(position, val);
                         if(board2.isResolved()){
                             if(!listeBoard.contains(board2)) {
                                 LOGGER.trace("resolveTout resolved : {} {}", board2, position);
-                                listeBoard.add(board2);
+                                listeBoard.add(new Board(board2));
                             }
                         } else {
-                            List<Board> listeResultat = resolveTout(board2);
+                            List<Board> listeResultat = resolveTout(board2, toutesSolutions);
                             if (!listeResultat.isEmpty()) {
                                 LOGGER.trace("resolveTout listeResultat : listeBoard={} listeResultat={}",listeBoard, listeResultat);
                                 for(Board b:listeResultat) {
@@ -74,6 +75,12 @@ public class SudokuSolver {
                                         listeBoard.add(b);
                                     }
                                 }
+                            }
+                        }
+                        board2.unset(position);
+                        if(!toutesSolutions){
+                            if(listeBoard.size()>1){
+                                break;
                             }
                         }
                     }
@@ -96,25 +103,38 @@ public class SudokuSolver {
                 res.remove(n);
             }
         }
-        for(int i=0;i<9;i++){
-            int n=board.get(position.getLigne(),i);
-            if(n>0){
-                res.remove(n);
+        if(!res.isEmpty()) {
+            for (int i = 0; i < 9; i++) {
+                int n = board.get(position.getLigne(), i);
+                if (n > 0) {
+                    res.remove(n);
+                }
+                if(res.isEmpty()) {
+                    break;
+                }
             }
         }
-        int debutLigne,finLigne;
-        int debutColonne,finColonne;
-        debutLigne=(position.getLigne()/3)*3;
-        finLigne=((position.getLigne()/3)+1)*3;
-        debutColonne=(position.getColonne()/3)*3;
-        finColonne=((position.getColonne()/3)+1)*3;
-        for(int i=debutLigne;i<finLigne;i++){
-            for(int j=debutColonne;j<finColonne;j++){
-                if(i!=position.getLigne()&&j!=position.getColonne()) {
-                    int n = board.get(i,j);
-                    if(n>0){
-                        res.remove(n);
+        if(!res.isEmpty()) {
+            int debutLigne, finLigne;
+            int debutColonne, finColonne;
+            debutLigne = (position.getLigne() / 3) * 3;
+            finLigne = ((position.getLigne() / 3) + 1) * 3;
+            debutColonne = (position.getColonne() / 3) * 3;
+            finColonne = ((position.getColonne() / 3) + 1) * 3;
+            for (int i = debutLigne; i < finLigne; i++) {
+                for (int j = debutColonne; j < finColonne; j++) {
+                    if (i != position.getLigne() && j != position.getColonne()) {
+                        int n = board.get(i, j);
+                        if (n > 0) {
+                            res.remove(n);
+                        }
                     }
+                    if(res.isEmpty()) {
+                        break;
+                    }
+                }
+                if(res.isEmpty()) {
+                    break;
                 }
             }
         }

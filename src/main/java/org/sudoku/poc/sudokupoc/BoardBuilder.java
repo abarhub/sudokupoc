@@ -14,7 +14,7 @@ public class BoardBuilder {
     public Board build(){
         Board tab=new Board();
         complete(tab);
-        Board res=cacheValeurs(tab,10);
+        Board res=cacheValeurs(tab,11);
         return res;
     }
 
