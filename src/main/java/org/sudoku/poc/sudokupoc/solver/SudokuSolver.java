@@ -57,6 +57,14 @@ public class SudokuSolver {
     }
 
     private SudokuAlgorithm getSudokuAlgorithm(){
-        return new SudokuBasicSolver();
+        int no;
+        no=1;
+        no=2;
+
+        if(no==2){
+            return new SudokuFastAlgorithmSolver();
+        } else {
+            return new SudokuBasicSolver();
+        }
     }
 }

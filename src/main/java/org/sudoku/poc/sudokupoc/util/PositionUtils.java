@@ -1,4 +1,6 @@
-package org.sudoku.poc.sudokupoc;
+package org.sudoku.poc.sudokupoc.util;
+
+import org.sudoku.poc.sudokupoc.Position;
 
 import java.util.ArrayList;
 import java.util.Iterator;

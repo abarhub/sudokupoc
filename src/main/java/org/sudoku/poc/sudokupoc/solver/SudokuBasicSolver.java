@@ -13,41 +13,6 @@ public class SudokuBasicSolver implements SudokuAlgorithm {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SudokuBasicSolver.class);
 
-    /*@Override
-    public Board resolve(Board board){
-        Preconditions.checkNotNull(board);
-        List<Board> liste = resolveTout(board,true);
-        if(liste.isEmpty()) {
-            LOGGER.info("il y a aucun sudoku");
-            return null;
-        } else {
-            LOGGER.info("il y a {} sudoku",liste.size());
-            int nb=1;
-            for(Board b:liste){
-                Verify.verify(b.isResolved(),"sudoku="+b);
-                LOGGER.info("sudoku {}: {}",nb,b);
-                nb++;
-            }
-            Set<Board> set=new HashSet<>(liste);
-            LOGGER.info("sudoku nb : {}",set.size());
-            if(liste.size()>=2){
-                Board b,b2;
-                b=liste.get(0);
-                b2=liste.get(1);
-                LOGGER.info("equals : {}",b.equals(b2));
-            }
-
-            return liste.get(0);
-        }
-    }
-
-    @Override
-    public int nbSolution(Board board){
-        Preconditions.checkNotNull(board);
-        List<Board> liste = resolveTout(board,false);
-        return liste.size();
-    }*/
-
     @Override
     public List<Board> resolveTout(Board board, boolean toutesSolutions){
         Preconditions.checkNotNull(board);

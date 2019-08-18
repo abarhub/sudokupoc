@@ -1,6 +1,7 @@
 package org.sudoku.poc.sudokupoc;
 
 import com.google.common.base.Preconditions;
+import org.sudoku.poc.sudokupoc.util.PositionUtils;
 
 import java.time.Instant;
 import java.util.ArrayList;
