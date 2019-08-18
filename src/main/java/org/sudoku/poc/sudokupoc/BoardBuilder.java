@@ -2,6 +2,9 @@ package org.sudoku.poc.sudokupoc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sudoku.poc.sudokupoc.solver.SudokuBasicSolver;
+import org.sudoku.poc.sudokupoc.solver.SudokuAlgorithm;
+import org.sudoku.poc.sudokupoc.solver.SudokuSolver;
 
 import java.util.*;
 
@@ -33,7 +36,7 @@ public class BoardBuilder {
                     position=listePos.get(j);
                     Board board3 = new Board(board2);
                     board3.unset(position);
-                    SudokuSolver sudokuSolver = new SudokuSolver();
+                    SudokuSolver sudokuSolver = getSudokuSolver();
                     int res = sudokuSolver.nbSolution(board3);
                     if (res == 0) {
                         LOGGER.error("Impossible de resoudre le sudoku: {} {}", board3,position);
@@ -53,13 +56,17 @@ public class BoardBuilder {
         return board2;
     }
 
+    private SudokuSolver getSudokuSolver() {
+        return new SudokuSolver();
+    }
+
     private void complete(Board tab){
         complete(tab,0,0);
     }
 
     private Set<Integer> valeursPossibles(Board tab, int ligne, int colonne){
         Set<Integer> res=new TreeSet<>();
-        SudokuSolver sudokuSolver=new SudokuSolver();
+        SudokuSolver sudokuSolver= getSudokuSolver();
         Set<Integer> tmp=sudokuSolver.valeursPossibles(tab,new Position(ligne,colonne));
         if(tmp!=null) {
             res.addAll(tmp);

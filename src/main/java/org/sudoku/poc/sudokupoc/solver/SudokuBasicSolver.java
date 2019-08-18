@@ -1,16 +1,19 @@
-package org.sudoku.poc.sudokupoc;
+package org.sudoku.poc.sudokupoc.solver;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Verify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sudoku.poc.sudokupoc.Board;
+import org.sudoku.poc.sudokupoc.Position;
 
 import java.util.*;
 
-public class SudokuSolver {
+public class SudokuBasicSolver implements SudokuAlgorithm {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SudokuSolver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SudokuBasicSolver.class);
 
+    /*@Override
     public Board resolve(Board board){
         Preconditions.checkNotNull(board);
         List<Board> liste = resolveTout(board,true);
@@ -38,12 +41,14 @@ public class SudokuSolver {
         }
     }
 
+    @Override
     public int nbSolution(Board board){
         Preconditions.checkNotNull(board);
         List<Board> liste = resolveTout(board,false);
         return liste.size();
-    }
+    }*/
 
+    @Override
     public List<Board> resolveTout(Board board, boolean toutesSolutions){
         Preconditions.checkNotNull(board);
         List<Board> listeBoard=new ArrayList<>();
@@ -90,6 +95,7 @@ public class SudokuSolver {
         return  listeBoard;
     }
 
+    @Override
     public Set<Integer> valeursPossibles(Board board, Position position){
         Preconditions.checkNotNull(board);
         Preconditions.checkNotNull(position);
