@@ -1,5 +1,9 @@
 package org.sudoku.poc.sudokupoc.solver.algox;
 
+import org.sudoku.poc.sudokupoc.Board;
+import org.sudoku.poc.sudokupoc.util.ConvertBoard;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +22,21 @@ public class ExactCover {
         DancingLinks dlx = new DancingLinks(cover);
         dlx.runSolver();
         return dlx.getResult();
+    }
+
+    public List<Board> solve(Board board) {
+        int[][] boardTab= ConvertBoard.convertBoard(board);
+        boolean[][] cover = initializeExactCoverBoard(boardTab);
+        DancingLinks dlx = new DancingLinks(cover);
+        dlx.runSolver();
+        List<int[][]> res=dlx.getResult();
+        List<Board> liste=new ArrayList<>();
+        if(res!=null&&!res.isEmpty()){
+            for(int[][] tabRes:res){
+                liste.add(ConvertBoard.convertTab(tabRes));
+            }
+        }
+        return liste;
     }
 
     private int getIndex(int row, int column, int num) {

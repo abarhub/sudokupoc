@@ -22,18 +22,21 @@ public class SudokuFastAlgorithmSolver implements SudokuAlgorithm {
 
         int[][] tab=new int[9][9];
 
-        tab=ConvertBoard.convertBoard(board);
+//        tab=ConvertBoard.convertBoard(board);
+//
+//        ExactCover exactCover=new ExactCover();
+//        List<int[][]> res = exactCover.solve(tab);
+//
+//        List<Board> list=new ArrayList<>();
+//
+//        if(res!=null&&!res.isEmpty()){
+//            for(int[][] tab2:res){
+//                list.add(ConvertBoard.convertTab(tab2));
+//            }
+//        }
 
         ExactCover exactCover=new ExactCover();
-        List<int[][]> res = exactCover.solve(tab);
-
-        List<Board> list=new ArrayList<>();
-
-        if(res!=null&&!res.isEmpty()){
-            for(int[][] tab2:res){
-                list.add(ConvertBoard.convertTab(tab2));
-            }
-        }
+        List<Board> list=exactCover.solve(board);
 
         return list;
     }
