@@ -17,8 +17,8 @@ public class AppRun implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //test1();
-        test2();
+        test1();
+        //test2();
 
         System.exit(0);
     }
