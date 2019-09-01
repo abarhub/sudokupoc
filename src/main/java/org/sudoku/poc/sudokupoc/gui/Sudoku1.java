@@ -3,10 +3,13 @@ package org.sudoku.poc.sudokupoc.gui;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -15,10 +18,13 @@ import org.slf4j.LoggerFactory;
 import org.sudoku.poc.sudokupoc.Board;
 import org.sudoku.poc.sudokupoc.BoardBuilder;
 import org.sudoku.poc.sudokupoc.Constants;
+import org.sudoku.poc.sudokupoc.Position;
 import org.sudoku.poc.sudokupoc.util.PositionUtils;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Sudoku1 extends Application {
 
@@ -32,6 +38,13 @@ public class Sudoku1 extends Application {
 
     private Board board;
     private GuiModel guiModel;
+
+    private Map<Position,Button> buttonGrille;
+
+    private Map<Integer,Button> buttonValeurs;
+
+    private Label affichePosition;
+    private Label afficheMessage;
 
     @Override
     /* modify the method declaration to throw generic Exception (in case any of the steps fail) */
@@ -79,6 +92,7 @@ public class Sudoku1 extends Application {
         Instant fin=Instant.now();
         LOGGER.info("duree:"+ Duration.between(debut,fin));
         LOGGER.info("sudoku={}",tab);
+        LOGGER.info("sudoku2={}",tab.getSolution());
         //affiche(tab);
         board=tab;
         guiModel=new GuiModel(board);
@@ -88,35 +102,87 @@ public class Sudoku1 extends Application {
 //        Button button1=new Button("1");
 //        Button button2=new Button("2");
 
+        BorderPane border = new BorderPane();
+
+        // la grille du milleux
+
         VBox vbox = new VBox();
 
-//        HBox hbox = new HBox();
-//        vbox.getChildren().add(hbox);
+        border.setCenter(vbox);
+
+        buttonGrille=new HashMap<>();
 
         for(int i = 1; i<= Constants.NB_LIGNES; i++){
             HBox hbox = new HBox();
             vbox.getChildren().add(hbox);
             for(int j=1;j<=Constants.NB_COLONNES;j++) {
-                Cell cell=guiModel.get(PositionUtils.getPosition(i-1,j-1));
+                final Position position = PositionUtils.getPosition(i - 1, j - 1);
+                Cell cell=guiModel.get(position);
                 int val;
-                val=i*j;
-                val=cell.getValeur();
-                Button button = new Button("" + val);
+                String valStr="";
+                //val=i*j;
+                if(cell.isFixe()){
+                    valStr="" + cell.getValeur();
+                }
+                //val=cell.getValeur();
+                Button button = new Button(valStr);
+                button.setOnAction(event -> cliqueChoixCaseGrille(position));
+                buttonGrille.put(position,button);
                 hbox.getChildren().add(button);
-//                if (i == 3 || i == 6) {
-//                    hbox = new HBox();
-//                    vbox.getChildren().add(hbox);
-//                }
+
             }
         }
 
-//        Button button3=new Button("3");
+        // les boutons du bas
 
-//        vbox.getChildren().add(button3);
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);
+        hbox.setStyle("-fx-background-color: #336699;");
+        //vbox.getChildren().add(hbox);
+        border.setBottom(hbox);
 
-        Scene scene = new Scene(vbox, 720, 480);
+        buttonValeurs=new HashMap<>();
+
+        for(int i=1;i<=9;i++){
+            final int val=i;
+            Button button = new Button("_"+val+"_");
+            button.setOnAction(event -> cliqueChoixValeur(val));
+            buttonValeurs.put(i,button);
+            hbox.getChildren().add(button);
+        }
+
+        // la partie droite
+
+        VBox vBox=new VBox();
+        vBox.setPadding(new Insets(15, 12, 15, 12));
+        vBox.setSpacing(10);
+        vBox.setStyle("-fx-background-color: #478a99;");
+        border.setRight(vBox);
+
+        Label label = new Label("Case :");
+        vBox.getChildren().add(label);
+
+        affichePosition=new Label("");
+        vBox.getChildren().add(affichePosition);
+
+        afficheMessage=new Label("");
+        vBox.getChildren().add(afficheMessage);
+
+        // création de la scene
+        Scene scene = new Scene(border, 720, 480);
 
         return scene;
+    }
+
+    private void cliqueChoixCaseGrille(Position position) {
+        LOGGER.info("click grille={}",position);
+        affichePosition.setText("x="+position.getLigne()+",y="+position.getColonne());
+    }
+
+    private void cliqueChoixValeur(int val){
+        LOGGER.info("click val={}",val);
+        afficheMessage.setText("val="+val);
     }
 
 }

@@ -20,7 +20,7 @@ public class SudokuBasicSolver implements SudokuAlgorithm {
         List<Position> positionList2=board.listePositionsNonAffecte();
         if(positionList2.isEmpty()){
             LOGGER.trace("resolveTout positionList2 empty : {}",board);
-            listeBoard.add(new Board(board));
+            listeBoard.add(new Board(board,true));
         } else {
             for (Position position : positionList2) {
                 Set<Integer> set = valeursPossibles(board, position);
@@ -34,7 +34,7 @@ public class SudokuBasicSolver implements SudokuAlgorithm {
                         if(board2.isResolved()){
                             if(!listeBoard.contains(board2)) {
                                 LOGGER.trace("resolveTout resolved : {} {}", board2, position);
-                                listeBoard.add(new Board(board2));
+                                listeBoard.add(new Board(board2, true));
                             }
                         } else {
                             List<Board> listeResultat = resolveTout(board2, toutesSolutions);

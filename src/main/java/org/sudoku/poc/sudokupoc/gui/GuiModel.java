@@ -18,7 +18,13 @@ public class GuiModel {
         this.board=new HashMap<>();
         for(Position p: PositionUtils.listePositions()){
             boolean fix=board.isSet(p);
-            this.board.put(p,new Cell(fix,board.get(p),fix));
+            int valeur;
+            if(fix){
+                valeur=board.get(p);
+            } else {
+                valeur=board.getSolution().get(p);
+            }
+            this.board.put(p,new Cell(fix,valeur,fix));
         }
     }
 

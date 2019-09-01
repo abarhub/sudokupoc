@@ -22,7 +22,7 @@ public class BoardBuilder {
     }
 
     private Board cacheValeurs(Board tab,int nbValeurCacher) {
-        Board board2=new Board(tab);
+        Board board2=new Board(tab,true);
         for(int i=0;i<nbValeurCacher;i++){
             LOGGER.info("cache de la case n°{}",i);
             Position position=null;
@@ -34,7 +34,7 @@ public class BoardBuilder {
                 boolean trouve=false;
                 for(int j=0;j<listePos.size();j++) {
                     position=listePos.get(j);
-                    Board board3 = new Board(board2);
+                    Board board3 = new Board(board2,false);
                     board3.unset(position);
                     SudokuSolver sudokuSolver = getSudokuSolver();
                     int res = sudokuSolver.nbSolution(board3);

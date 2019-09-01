@@ -11,15 +11,17 @@ import java.util.List;
 public class Board {
 
     private final int tab[][];
+    private final Board solution;
     private Instant lasteUpdate;
     private Instant lastIsResolvedInstant;
     private boolean lastIsResolvedValue;
 
     public Board() {
         tab=createTab();
+        solution=null;
     }
 
-    public Board(Board board){
+    public Board(Board board, boolean isSolution){
         Preconditions.checkNotNull(board);
         tab=createTab();
         for(int i=0;i<tab.length;i++){
@@ -27,10 +29,15 @@ public class Board {
                 tab[i][j]=board.tab[i][j];
             }
         }
+        if(isSolution) {
+            solution = board;
+        } else {
+            solution = null;
+        }
     }
 
     private int[][] createTab() {
-        return new int[9][9];
+        return new int[Constants.NB_LIGNES][Constants.NB_COLONNES];
     }
 
     public int get(int ligne,int colonne){
@@ -161,5 +168,9 @@ public class Board {
             }
         }
         return liste;
+    }
+
+    public Board getSolution() {
+        return solution;
     }
 }
