@@ -1,5 +1,6 @@
 package org.sudoku.poc.sudokupoc.util;
 
+import org.sudoku.poc.sudokupoc.Constants;
 import org.sudoku.poc.sudokupoc.Position;
 
 import java.util.ArrayList;
@@ -11,19 +12,13 @@ public class PositionUtils {
     //private static final
 
     public static Iterator<Position> iterator(){
-        List<Position> liste=new ArrayList<>();
-        for(int ligne=0;ligne<9;ligne++){
-            for(int colonne=0;colonne<9;colonne++){
-                liste.add(getPosition(ligne,colonne));
-            }
-        }
-        return liste.iterator();
+        return listePositions().iterator();
     }
 
     public static List<Position> listePositions(){
         List<Position> liste=new ArrayList<>();
-        for(int ligne=0;ligne<9;ligne++){
-            for(int colonne=0;colonne<9;colonne++){
+        for(int ligne=0;ligne<Constants.NB_LIGNES;ligne++){
+            for(int colonne=0;colonne<Constants.NB_COLONNES;colonne++){
                 liste.add(getPosition(ligne,colonne));
             }
         }

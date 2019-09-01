@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
+import org.sudoku.poc.sudokupoc.gui.StartJavaFX;
 import org.sudoku.poc.sudokupoc.solver.algox.ExactCover;
 
 import java.time.Duration;
@@ -17,10 +18,20 @@ public class AppRun implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        test1();
-        //test2();
+        boolean gui;
 
-        System.exit(0);
+        gui=false;
+        gui=true;
+
+        if(gui){
+            test3();
+
+        } else {
+            test1();
+            //test2();
+
+            System.exit(0);
+        }
     }
 
     private void test2() {
@@ -55,6 +66,12 @@ public class AppRun implements CommandLineRunner {
 
     private void affiche(Board tab){
         System.out.println(tab);
+    }
+
+
+    private void test3() {
+        StartJavaFX startJavaFX=new StartJavaFX();
+        startJavaFX.start();
     }
 
 }

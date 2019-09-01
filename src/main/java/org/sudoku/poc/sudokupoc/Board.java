@@ -34,8 +34,8 @@ public class Board {
     }
 
     public int get(int ligne,int colonne){
-        Preconditions.checkElementIndex(ligne,9);
-        Preconditions.checkElementIndex(colonne,9);
+        Preconditions.checkElementIndex(ligne,Constants.NB_LIGNES);
+        Preconditions.checkElementIndex(colonne,Constants.NB_COLONNES);
         return get(PositionUtils.getPosition(ligne,colonne));
     }
 
@@ -45,8 +45,8 @@ public class Board {
     }
 
     public void set(int ligne,int colonne, int val){
-        Preconditions.checkElementIndex(ligne,9);
-        Preconditions.checkElementIndex(colonne,9);
+        Preconditions.checkElementIndex(ligne,Constants.NB_LIGNES);
+        Preconditions.checkElementIndex(colonne,Constants.NB_COLONNES);
         Preconditions.checkArgument(val>=1);
         Preconditions.checkArgument(val<=9);
         set(PositionUtils.getPosition(ligne,colonne),val);
@@ -61,8 +61,8 @@ public class Board {
     }
 
     public void unset(int ligne,int colonne){
-        Preconditions.checkElementIndex(ligne,9);
-        Preconditions.checkElementIndex(colonne,9);
+        Preconditions.checkElementIndex(ligne,Constants.NB_LIGNES);
+        Preconditions.checkElementIndex(colonne,Constants.NB_COLONNES);
         unset(PositionUtils.getPosition(ligne,colonne));
     }
 
@@ -73,8 +73,8 @@ public class Board {
     }
 
     public boolean isSet(int ligne,int colonne){
-        Preconditions.checkElementIndex(ligne,9);
-        Preconditions.checkElementIndex(colonne,9);
+        Preconditions.checkElementIndex(ligne,Constants.NB_LIGNES);
+        Preconditions.checkElementIndex(colonne,Constants.NB_COLONNES);
         return tab[ligne][colonne]!=0;
     }
 
@@ -101,8 +101,8 @@ public class Board {
             }
         }
         boolean res=true;
-        for(int i=0;i<9;i++) {
-            for (int j = 0; j < 9; j++) {
+        for(int i=0;i<Constants.NB_LIGNES;i++) {
+            for (int j = 0; j < Constants.NB_COLONNES; j++) {
                 if(!isSet(PositionUtils.getPosition(i,j))){
                     res=false;
                 }
@@ -138,8 +138,8 @@ public class Board {
 
     public List<Position> listePositionsNonAffecte() {
         List<Position> liste = new ArrayList<>();
-        for (int ligne = 0; ligne < 9; ligne++) {
-            for (int colonne = 0; colonne < 9; colonne++) {
+        for (int ligne = 0; ligne < Constants.NB_LIGNES; ligne++) {
+            for (int colonne = 0; colonne < Constants.NB_COLONNES; colonne++) {
                 Position p=PositionUtils.getPosition(ligne, colonne);
                 if(!isSet(p)) {
                     liste.add(p);
@@ -152,8 +152,8 @@ public class Board {
 
     public List<Position> listePositionsAffecte() {
         List<Position> liste = new ArrayList<>();
-        for (int ligne = 0; ligne < 9; ligne++) {
-            for (int colonne = 0; colonne < 9; colonne++) {
+        for (int ligne = 0; ligne < Constants.NB_LIGNES; ligne++) {
+            for (int colonne = 0; colonne < Constants.NB_COLONNES; colonne++) {
                 Position p=PositionUtils.getPosition(ligne, colonne);
                 if(isSet(p)) {
                     liste.add(p);

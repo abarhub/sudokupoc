@@ -12,8 +12,8 @@ public class Position {
     private final int colonne;
 
     public Position(int ligne, int colonne) {
-        Preconditions.checkElementIndex(ligne,9,"ligne");
-        Preconditions.checkElementIndex(colonne,9,"colonne");
+        Preconditions.checkElementIndex(ligne,Constants.NB_LIGNES,"ligne");
+        Preconditions.checkElementIndex(colonne,Constants.NB_COLONNES,"colonne");
         this.ligne = ligne;
         this.colonne = colonne;
     }
