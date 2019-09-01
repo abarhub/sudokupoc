@@ -104,9 +104,15 @@ public class Sudoku1 extends Application {
 
         BorderPane border = new BorderPane();
 
+        final int espaceSeparation=10;
+
         // la grille du milleux
 
         VBox vbox = new VBox();
+        vbox.setSpacing(espaceSeparation);
+
+        VBox vbox2 = new VBox();
+        vbox.getChildren().add(vbox2);
 
         border.setCenter(vbox);
 
@@ -114,22 +120,37 @@ public class Sudoku1 extends Application {
 
         for(int i = 1; i<= Constants.NB_LIGNES; i++){
             HBox hbox = new HBox();
-            vbox.getChildren().add(hbox);
+            hbox.setSpacing(espaceSeparation);
+            vbox2.getChildren().add(hbox);
+            HBox hbox2 = new HBox();
+            hbox2.setPrefWidth(50);
+            hbox.getChildren().add(hbox2);
             for(int j=1;j<=Constants.NB_COLONNES;j++) {
                 final Position position = PositionUtils.getPosition(i - 1, j - 1);
                 Cell cell=guiModel.get(position);
                 int val;
-                String valStr="";
+                String valStr=" ";
                 //val=i*j;
                 if(cell.isFixe()){
                     valStr="" + cell.getValeur();
                 }
                 //val=cell.getValeur();
                 Button button = new Button(valStr);
+                button.setMinWidth(hbox2.getPrefWidth());
+                button.setMinWidth(hbox2.getPrefWidth());
                 button.setOnAction(event -> cliqueChoixCaseGrille(position));
                 buttonGrille.put(position,button);
-                hbox.getChildren().add(button);
+                hbox2.getChildren().add(button);
 
+                if(j%3==0){
+                    hbox2 = new HBox();
+                    hbox2.setPrefWidth(50);
+                    hbox.getChildren().add(hbox2);
+                }
+            }
+            if(i%3==0){
+                vbox2 = new VBox();
+                vbox.getChildren().add(vbox2);
             }
         }
 

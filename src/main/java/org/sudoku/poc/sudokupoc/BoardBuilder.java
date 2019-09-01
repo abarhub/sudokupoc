@@ -1,5 +1,6 @@
 package org.sudoku.poc.sudokupoc;
 
+import com.google.common.base.Verify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sudoku.poc.sudokupoc.solver.SudokuBasicSolver;
@@ -27,13 +28,15 @@ public class BoardBuilder {
             LOGGER.info("cache de la case n°{}",i);
             Position position=null;
             int nbTentative=0;
-            List<Position> listePos=tab.listePositionsAffecte();
+            List<Position> listePos=board2.listePositionsAffecte();
             if(listePos.isEmpty()){
                 break;
             } else {
                 boolean trouve=false;
+                Collections.shuffle(listePos,RANDOM);
                 for(int j=0;j<listePos.size();j++) {
                     position=listePos.get(j);
+                    Verify.verify(board2.isSet(position));
                     Board board3 = new Board(board2,false);
                     board3.unset(position);
                     SudokuSolver sudokuSolver = getSudokuSolver();
@@ -45,11 +48,14 @@ public class BoardBuilder {
                     } else {
                         trouve=true;
                         board2.unset(position);
+                        LOGGER.trace("case cache: {}",position);
                         break;
                     }
                 }
                 if(!trouve){
                     LOGGER.error("Impossible de trouver une solution unique: {}", board2);
+                } else {
+                    LOGGER.trace("sudoku: {}",board2);
                 }
             }
         }
