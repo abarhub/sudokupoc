@@ -1,14 +1,15 @@
 package org.sudoku.poc.sudokupoc.gui;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -25,10 +26,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Sudoku1 extends Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Sudoku1.class);
+    public static final int DELETE_VALUE = -1;
 
     @FXML
     Button button_two;
@@ -41,10 +44,14 @@ public class Sudoku1 extends Application {
 
     private Map<Position,Button> buttonGrille;
 
-    private Map<Integer,Button> buttonValeurs;
+    private Map<Integer,ToggleButton> buttonValeurs;
+    private ToggleButton delete;
+    private ToggleGroup groupValeurs;
 
     private Label affichePosition;
     private Label afficheMessage;
+
+    private Optional<Integer> valeurSelectionnee;
 
     @Override
     /* modify the method declaration to throw generic Exception (in case any of the steps fail) */
@@ -96,6 +103,7 @@ public class Sudoku1 extends Application {
         //affiche(tab);
         board=tab;
         guiModel=new GuiModel(board);
+        valeurSelectionnee=Optional.empty();
     }
 
     private Scene createScene(){
@@ -164,14 +172,41 @@ public class Sudoku1 extends Application {
         border.setBottom(hbox);
 
         buttonValeurs=new HashMap<>();
+        groupValeurs = new ToggleGroup();
 
         for(int i=1;i<=9;i++){
             final int val=i;
-            Button button = new Button("_"+val+"_");
+            String label;
+            label="_"+val+"_";
+            label=""+val;
+            ToggleButton button = new ToggleButton(label);
             button.setOnAction(event -> cliqueChoixValeur(val));
+            button.setSelected(false);
+            button.setUserData(i);
+            button.setToggleGroup(groupValeurs);
             buttonValeurs.put(i,button);
             hbox.getChildren().add(button);
         }
+
+        delete=new ToggleButton("del");
+        delete.setSelected(false);
+        delete.setUserData(DELETE_VALUE);
+        delete.setToggleGroup(groupValeurs);
+        hbox.getChildren().add(delete);
+
+        groupValeurs.selectedToggleProperty().addListener((ov, toggle, new_toggle) -> {
+            if (new_toggle == null) {
+                //LOGGER.info("rien n'est selectionne");
+                selectionValeur(Optional.empty());
+            } else {
+                //LOGGER.info("selectionne: {}", groupValeurs.getSelectedToggle().getUserData());
+                //rect.setFill(                           (Color) group.getSelectedToggle().getUserData()
+                //);
+                Object val=groupValeurs.getSelectedToggle().getUserData();
+                Integer valeur= (Integer) val;
+                selectionValeur(Optional.of(valeur));
+            }
+        });
 
         // la partie droite
 
@@ -199,6 +234,37 @@ public class Sudoku1 extends Application {
     private void cliqueChoixCaseGrille(Position position) {
         LOGGER.info("click grille={}",position);
         affichePosition.setText("x="+position.getLigne()+",y="+position.getColonne());
+        if(!guiModel.get(position).isFixe()){
+            if(this.valeurSelectionnee.isPresent()){
+                int valeur=this.valeurSelectionnee.get().intValue();
+                final Cell cell = guiModel.get(position);
+                Button button = buttonGrille.get(position);
+                if(valeur==DELETE_VALUE){
+                    cell.setValeurAffecte(0);
+                    cell.setVisible(false);
+                    button.setText("");
+                    button.setStyle("");
+                } else {
+                    cell.setValeurAffecte(valeur);
+                    cell.setVisible(true);
+                    button.setText("" + valeur);
+                    if (valeur != cell.getValeur()) {
+                        button.setStyle("-fx-background-color: #ff0000; ");
+                    }
+                }
+            }
+        }
+    }
+
+    private void selectionValeur(Optional<Integer> valeurSelectionnee){
+        if(valeurSelectionnee.isPresent()){
+            int valeur=valeurSelectionnee.get();
+            LOGGER.info("selectionne: {}", valeur);
+            this.valeurSelectionnee=valeurSelectionnee;
+        } else {
+            LOGGER.info("rien n'est selectionne");
+            this.valeurSelectionnee=Optional.empty();
+        }
     }
 
     private void cliqueChoixValeur(int val){

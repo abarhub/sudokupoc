@@ -4,7 +4,8 @@ public class Cell {
 
     private final boolean fixe;
     private final int valeur;
-    private final boolean visible;
+    private boolean visible;
+    private int valeurAffecte;
 
     public Cell(boolean fixe, int valeur, boolean valeurVisible) {
         this.fixe = fixe;
@@ -24,12 +25,25 @@ public class Cell {
         return visible;
     }
 
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public int getValeurAffecte() {
+        return valeurAffecte;
+    }
+
+    public void setValeurAffecte(int valeurAffecte) {
+        this.valeurAffecte = valeurAffecte;
+    }
+
     @Override
     public String toString() {
         return "Cell{" +
                 "fixe=" + fixe +
                 ", valeur=" + valeur +
                 ", visible=" + visible +
+                ", valeurAffecte=" + valeurAffecte +
                 '}';
     }
 }
